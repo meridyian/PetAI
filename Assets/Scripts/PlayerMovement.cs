@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,7 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speedSmoothVelocity = 0f;
     [SerializeField] private float speedSmoothTime = 0.1f;
     [SerializeField] private float rotationSpeed = 0.01f;
-    
+
+    private bool takeBall;
     
     //jumping parameters and ground check
     [SerializeField] private bool isGrounded;
@@ -24,7 +26,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     public Transform groundCheck;
     public float gravity = -9.81f;
-
     private float targetSpeed = 0f;
     public Vector3 gravityVector;
     
@@ -33,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController charController = null;
     private Animator anim = null;
 
+    
+    
     private void Start()
     {
         charController = GetComponent<CharacterController>();
@@ -77,30 +80,22 @@ public class PlayerMovement : MonoBehaviour
                 rotationSpeed);
         }
 
-        // the speed that you use as threshold
+        // the speed that you wat to reach gradually
         targetSpeed = walkSpeed * movementInput.magnitude;
 
-
-        // if left shift is pressed player should run
+        // Run movement
         if (Input.GetKey(KeyCode.LeftShift))
         {
             targetSpeed = runSpeed * movementInput.magnitude;
-
+            anim.SetFloat("Speed", 1f * movementInput.magnitude, speedSmoothTime, Time.deltaTime);
         }
 
         // walk animation
         anim.SetFloat("Speed", 0.5f * movementInput.magnitude, speedSmoothTime, Time.deltaTime);
 
-        // run animation 
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            anim.SetFloat("Speed", 1f * movementInput.magnitude, speedSmoothTime, Time.deltaTime);
-        }
-
-        // pet the animal
+        // Pet the animal
         if (Input.GetKey(KeyCode.E) && desiredMoveDirection == Vector3.zero)
         {
-
             StartCoroutine(PetAnimal());
         }
 
@@ -108,6 +103,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             gravityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
+
+        if (takeBall && Input.GetKey(KeyCode.T) && desiredMoveDirection == Vector3.zero)
+        {
+            StartCoroutine(ThrowBall());
         }
         
         // to adjust speed changes
@@ -117,9 +117,28 @@ public class PlayerMovement : MonoBehaviour
         charController.Move(desiredMoveDirection * currentSpeed * Time.deltaTime);
         gravityVector.y += gravity * Time.deltaTime;
         charController.Move(gravityVector * Time.deltaTime);
+      
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ball"))
+        {
+            takeBall = true;
+            other.gameObject.transform.parent = transform;
+        }
+    }
 
 
-            
+    public IEnumerator ThrowBall()
+    {
+        //player geldi topun collider alanına girdi 
+        anim.SetBool("isBallThrown", true);
+        yield return new WaitForSeconds(1f);
+        transform.GetChild(3).gameObject.SetActive(false);
+        yield return new WaitForSeconds(5f);
+        anim.SetBool("isBallThrown", false);
+
     }
 
     public IEnumerator PetAnimal()
@@ -128,6 +147,8 @@ public class PlayerMovement : MonoBehaviour
         // after adding ball throw animation, player can pet the animal
         // after animal turns around the player pet the animal
         
+        // anim.SetBoll("isBallThrown", true);
+        // check if the animal came back 
         yield return new WaitForSeconds(1f);
         anim.SetBool("isPetting", true);
 
