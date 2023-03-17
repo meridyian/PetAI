@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float runSpeed = 15f;
     [SerializeField] private float jumpHeight = 1.5f;
-    private float currentSpeed = 0f;
+    public float currentSpeed = 0f;
     
     // rotation control
     [SerializeField] private float speedSmoothVelocity = 0f;
@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController charController = null;
     private Animator anim = null;
 
-    
+    public static PlayerMovement playerInstance;
     
     private void Start()
     {
@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         // if character is not grounded he should fall
         if (isGrounded && gravityVector.y < 0)
         {
-            gravityVector.y -= 2f;
+            gravityVector.y -= 3f;
         }
 
 
@@ -115,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
 
         charController.Move(desiredMoveDirection * currentSpeed * Time.deltaTime);
-        gravityVector.y += gravity * Time.deltaTime;
+        gravityVector.y += gravity * Time.deltaTime * 1.2f;
         charController.Move(gravityVector * Time.deltaTime);
       
     }
@@ -129,10 +129,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     public IEnumerator ThrowBall()
     {
-        //player geldi topun collider alanına girdi 
         anim.SetBool("isBallThrown", true);
         yield return new WaitForSeconds(1f);
         transform.GetChild(3).gameObject.SetActive(false);
