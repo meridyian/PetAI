@@ -10,16 +10,18 @@ public class AIFollow : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private NavMeshAgent agent;
+
     [SerializeField] private Animator foxAnimator;
-    
+    /*
     [SerializeField] private float speedSmoothVelocity = 0f;
     [SerializeField] private float speedSmoothTime = 0.1f;
-    
-    public float maxTime = 1.0f;
+    */
+
+    public float maxTime = .05f;
     public float minDistance = 1.0f;
     private float timer = 0.0f;
-    
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,18 +32,27 @@ public class AIFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer -= Time.deltaTime;
-        if (timer < 0.0f)
+        float sqDistance = (playerTransform.position - transform.position).sqrMagnitude;
+        if (sqDistance * 1.1f < minDistance * minDistance)
         {
-            float sqDistance = (playerTransform.position - transform.position).sqrMagnitude;
-            if (sqDistance > minDistance * minDistance)
-            {
-                agent.destination = playerTransform.position;
-            }
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.LookRotation(playerTransform.forward),
+                Time.deltaTime * 5);
 
-            timer = maxTime;
         }
-        
-        foxAnimator.SetFloat("AISpeed",agent.velocity.magnitude, speedSmoothTime,speedSmoothVelocity);
+
+        //timer -= Time.deltaTime;
+        //if (timer < 0.0f)
+        //{
+        if (sqDistance > minDistance * minDistance)
+        {
+            agent.destination = playerTransform.position;
+        }
+
+
+        //    timer = maxTime;
+        //}       
+
+        foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude / agent.speed);
     }
 }
