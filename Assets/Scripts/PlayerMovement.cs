@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         // if character is not grounded he should fall
         if (isGrounded && gravityVector.y < 0)
         {
-            gravityVector.y -= 3f;
+            gravityVector.y -= 2.5f;
         }
 
 
