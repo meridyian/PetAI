@@ -10,13 +10,8 @@ public class AIFollow : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private NavMeshAgent agent;
-
     [SerializeField] private Animator foxAnimator;
-    /*
-    [SerializeField] private float speedSmoothVelocity = 0f;
-    [SerializeField] private float speedSmoothTime = 0.1f;
-    */
-
+    
     public float maxTime = .05f;
     public float minDistance = 1.0f;
     private float timer = 0.0f;
@@ -38,11 +33,17 @@ public class AIFollow : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.LookRotation(playerTransform.forward),
                 Time.deltaTime * 5);
-
+            timer -= Time.deltaTime;
+            if (timer < 0.0f)
+            {
+                foxAnimator.SetTrigger("Sit");
+                timer = maxTime;
+            }
+            
         }
 
-        //timer -= Time.deltaTime;
-        //if (timer < 0.0f)
+        //
+        //
         //{
         if (sqDistance > minDistance * minDistance)
         {
@@ -50,7 +51,7 @@ public class AIFollow : MonoBehaviour
         }
 
 
-        //    timer = maxTime;
+        //    
         //}       
 
         foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude / agent.speed);
