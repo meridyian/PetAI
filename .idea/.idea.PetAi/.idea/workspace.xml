@@ -10,6 +10,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerControl.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerMovement.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Thrower.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -43,7 +44,7 @@
       <workItem from="1678979485792" duration="2200000" />
       <workItem from="1678998245695" duration="5484000" />
       <workItem from="1679035361934" duration="8360000" />
-      <workItem from="1679144203095" duration="4897000" />
+      <workItem from="1679144203095" duration="17198000" />
     </task>
     <servers />
   </component>

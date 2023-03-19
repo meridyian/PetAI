@@ -40,7 +40,6 @@ public class PlayerMovement : MonoBehaviour
     {
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
-
         mainCameraTransform = Camera.main.transform;
     }
 
@@ -109,6 +108,12 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(ThrowBall());
         }
+
+        if (Input.GetKey(KeyCode.R) && desiredMoveDirection == Vector3.zero)
+        {
+            //fox animator burdan kontrol edilebilir mi?
+            //StartCoroutine(PetAnimal());
+        }
         
         // to adjust speed changes
         
@@ -133,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
     {
         anim.SetBool("isBallThrown", true);
         yield return new WaitForSeconds(1f);
-        transform.GetChild(3).gameObject.SetActive(false);
+        transform.GetChild(4).gameObject.SetActive(false);
         yield return new WaitForSeconds(5f);
         anim.SetBool("isBallThrown", false);
 
@@ -144,14 +149,9 @@ public class PlayerMovement : MonoBehaviour
         // put the animal as target
         // after adding ball throw animation, player can pet the animal
         // after animal turns around the player pet the animal
-        
-        // anim.SetBoll("isBallThrown", true);
-        // check if the animal came back 
         yield return new WaitForSeconds(1f);
         anim.SetBool("isPetting", true);
-
         yield return new WaitForSeconds(5f);
-        
         anim.SetBool("isPetting", false);
     }
 
