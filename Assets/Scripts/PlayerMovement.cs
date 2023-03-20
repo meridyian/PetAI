@@ -8,8 +8,8 @@ using UnityEngine.EventSystems;
 public class PlayerMovement : MonoBehaviour
 {
     // Movement parameters 
-    [SerializeField] private float walkSpeed = 2f;
-    [SerializeField] private float runSpeed = 15f;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
     [SerializeField] private float jumpHeight = 1.5f;
     public float currentSpeed = 0f;
     
@@ -127,19 +127,16 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Ball"))
-        {
-            takeBall = true;
-            other.gameObject.transform.parent = transform;
-        }
+        if (!other.gameObject.CompareTag("Ball")) return;
+        takeBall = true;
+        other.gameObject.transform.parent = transform;
+        
     }
 
     public IEnumerator ThrowBall()
     {
         anim.SetBool("isBallThrown", true);
-        yield return new WaitForSeconds(1f);
-        transform.GetChild(4).gameObject.SetActive(false);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(4f);
         anim.SetBool("isBallThrown", false);
 
     }
