@@ -1,22 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 
 public class BallScript : MonoBehaviour
 {
     [SerializeField] private Transform parentBone;
-    [SerializeField] private Rigidbody rigid;
+    public Rigidbody rigid;
     [SerializeField] private Vector3 lastPos;
     [SerializeField] private Vector3 curVel;
     public float throwSpeed;
     public GameObject player;
     public bool ballisGrounded;
+    public static BallScript ballInstance;
+    
 
+    public void Awake()
+    {
+        ballInstance = this;
+    }
     public void Start()
     {
         transform.parent = parentBone;
-        rigid.useGravity = false;
-        rigid.isKinematic = true;
+        
     }
     
     
@@ -33,11 +39,19 @@ public class BallScript : MonoBehaviour
         }
         else
         {
-            
+
             rigid.isKinematic = false;
         }
+    }
+
+    public void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            ballisGrounded = true;
+            
+        }
         
-       
     }
     
     

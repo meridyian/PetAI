@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
@@ -65,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
 
         
         // if character is not grounded he should fall
-        if (isGrounded && gravityVector.y < 0)
+        if (!isGrounded && gravityVector.y < 0)
         {
             gravityVector.y -= 2.5f;
         }
@@ -107,6 +108,7 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(ThrowBall());
         }
+        
 
         // to adjust speed changes
 
@@ -138,6 +140,8 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(5f);
         anim.SetBool("isPetting", false);
     }
+
+    
 
     private void OnApplicationFocus(bool focus)
     {

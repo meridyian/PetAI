@@ -16,13 +16,16 @@ public class AIFollow : MonoBehaviour
     public float maxTime = .05f;
     public float minDistance = 1.0f;
     private float timer = 0.0f;
-
+    public Transform foxMouth;
+    public Vector3 ballPosition;
+    
     public static AIFollow AInstance;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        
         AInstance = this;
         agent = GetComponent<NavMeshAgent>();
         foxAnimator = GetComponent<Animator>();
@@ -34,6 +37,7 @@ public class AIFollow : MonoBehaviour
         float sqDistance = (playerTransform.position - transform.position).sqrMagnitude;
         if (sqDistance * 1.1f < minDistance * minDistance)
         {
+            foxAnimator.SetFloat("AISpeed", 0f);
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.LookRotation(playerTransform.forward),
                 Time.deltaTime * 5);
@@ -49,10 +53,34 @@ public class AIFollow : MonoBehaviour
         if (sqDistance > minDistance * minDistance)
         {
             agent.destination = playerTransform.position;
+        }
+        
+        foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
+        
+        if (BallScript.ballInstance.ballisGrounded)
+        {
+            ballPosition = BallScript.ballInstance.gameObject.transform.position;
+            agent.destination = BallScript.ballInstance.transform.position;
+            StartCoroutine(RunToBall());
 
         }
+    }
 
-        foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
+    public IEnumerator RunToBall()
+    {
+        float ballDistance = (BallScript.ballInstance.transform.position - transform.position).sqrMagnitude;
+        Debug.Log(ballDistance);
+        if (ballDistance < 0.3f)
+        {
+            foxAnimator.SetBool("TurnAround", true);
+            //foxAnimator.SetFloat("AISpeed", 0.2f);
+            yield return new WaitForSeconds(1f);
+            ballPosition = Vector3.MoveTowards(ballPosition, foxMouth.position, Time.deltaTime);
+            BallScript.ballInstance.ballisGrounded = false;
+            foxAnimator.SetBool("TurnAround", false);
+            agent.destination = playerTransform.position;
+            foxAnimator.SetFloat("AISpeed", 1f);
+        }
     }
 
     public void RandomMovement()
