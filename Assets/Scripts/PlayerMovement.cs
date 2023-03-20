@@ -57,11 +57,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
         Vector3 movementDirection = new Vector3(horizontalInput,0, verticalInput);
         float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
-
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-        {
-            inputMagnitude /= 2;
-        }
+        
 
         movementDirection = Quaternion.AngleAxis(mainCameraTransform.rotation.eulerAngles.y, Vector3.up) *
                             movementDirection;

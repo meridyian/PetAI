@@ -33,7 +33,8 @@ public class BallScript : MonoBehaviour
         }
         else
         {
-            rigid.isKinematic = true;
+            
+            rigid.isKinematic = false;
         }
         
        

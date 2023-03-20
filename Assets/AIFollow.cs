@@ -52,7 +52,7 @@ public class AIFollow : MonoBehaviour
 
         }
 
-        //foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude / agent.speed);
+        foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
     }
 
     public void RandomMovement()
