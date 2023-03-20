@@ -12,8 +12,6 @@ public class AIFollow : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private NavMeshAgent agent;
     public Animator foxAnimator;
-    public bool aiArrived;
-
     
     public float maxTime = .05f;
     public float minDistance = 1.0f;
@@ -39,8 +37,6 @@ public class AIFollow : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.LookRotation(playerTransform.forward),
                 Time.deltaTime * 5);
-            aiArrived = true;
-            Debug.Log(agent.velocity.magnitude / agent.speed);
             if (agent.velocity.magnitude / agent.speed < 0.1f)
             {
                 RandomMovement();
@@ -48,13 +44,15 @@ public class AIFollow : MonoBehaviour
             
         }
         
-
+        // follow player
+        
         if (sqDistance > minDistance * minDistance)
         {
             agent.destination = playerTransform.position;
+
         }
 
-        foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude / agent.speed);
+        //foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude / agent.speed);
     }
 
     public void RandomMovement()

@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class Thrower : MonoBehaviour
 {
-    [SerializeField] private GameObject ball;
-    public void ThrowBall()
+    public GameObject ballPref;
+    // Start is called before the first frame update
+    void Start()
     {
-        BallScript ballScript = ball.GetComponent<BallScript>();
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void Throw()
+    {
+        BallScript ballScript = ballPref.GetComponent<BallScript>();
         ballScript.ReleaseBall();
     }
 }

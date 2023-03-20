@@ -5,28 +5,39 @@ using UnityEngine;
 public class BallScript : MonoBehaviour
 {
     [SerializeField] private Transform parentBone;
-    [SerializeField] private Rigidbody rigidbody;
-    [SerializeField] private Vector3 lastPosition;
-    [SerializeField] private Vector3 currentVel;
+    [SerializeField] private Rigidbody rigid;
+    [SerializeField] private Vector3 lastPos;
+    [SerializeField] private Vector3 curVel;
+    public float throwSpeed;
+    public GameObject player;
+    public bool ballisGrounded;
 
-    
-    void Start()
+    public void Start()
     {
         transform.parent = parentBone;
-        rigidbody.useGravity = false;
+        rigid.useGravity = false;
+        rigid.isKinematic = true;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
+    
+    
     public void ReleaseBall()
     {
         transform.parent = null;
+        rigid.useGravity = true;
+        rigid.isKinematic = false;
         transform.rotation = parentBone.transform.rotation;
-        rigidbody.AddForce(transform.forward * 20000);
+       
+        if (rigid.transform.position.y > 0f)
+        {
+            rigid.AddForce((player.transform.forward + player.transform.up) * throwSpeed);
+        }
+        else
+        {
+            rigid.isKinematic = true;
+        }
+        
+       
     }
+    
+    
 }
