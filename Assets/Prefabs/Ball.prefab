@@ -94,7 +94,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571730986097866645}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.6
@@ -113,13 +113,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentBone: {fileID: 0}
   rigid: {fileID: 1571730986097866654}
+  player: {fileID: 0}
+  groundedTransform: {fileID: 0}
   lastPos: {x: 0, y: 0, z: 0}
   curVel: {x: 0, y: 0, z: 0}
   throwSpeed: 400
-  player: {fileID: 0}
   ballisGrounded: 0
   ballDistance: 0
   outofBounds: 0
+  ballSpawner: {fileID: 0}
 --- !u!54 &1571730986097866654
 Rigidbody:
   m_ObjectHideFlags: 0

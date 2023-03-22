@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpHeight = 1.5f;
     public float currentSpeed = 0f;
     public bool throwBall;
+    public bool playerHasBall  =true;
     
     //parentBone u burda alman gerekebilir
     public Transform parentBone;
@@ -117,9 +118,10 @@ public class PlayerMovement : MonoBehaviour
             gravityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        if (Input.GetKeyDown(KeyCode.T) && movementDirection == Vector3.zero)
+        if (Input.GetKeyDown(KeyCode.T) && movementDirection == Vector3.zero && playerHasBall)
         {
             StartCoroutine(ThrowBall());
+            playerHasBall = false;
         }
         
         // to adjust speed changes

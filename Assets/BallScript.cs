@@ -9,6 +9,7 @@ public class BallScript : MonoBehaviour
     public Transform parentBone;
     public Rigidbody rigid;
     public GameObject player;
+    public Transform groundedTransform;
     
     [SerializeField] private Vector3 lastPos;
     [SerializeField] private Vector3 curVel;
@@ -48,6 +49,7 @@ public class BallScript : MonoBehaviour
         {
             transform.position = parentBone.transform.position;
             transform.parent = parentBone.transform;
+            //PlayerMovement.playerInstance.playerHasBall = true;
             //AIFollow.AInstance.hasBall = false;
         }
 
@@ -56,7 +58,6 @@ public class BallScript : MonoBehaviour
             outofBounds = true;
             ballSpawner.SpawnBall();
             Destroy(gameObject);
-            
         }
     }
     
@@ -99,9 +100,10 @@ public class BallScript : MonoBehaviour
         //transform.parent = null;
         rigid.isKinematic = true;
         transform.parent = parentBone;
-        transform.position = parentBone.position;
         GetComponent<SphereCollider>().isTrigger = false;
-        
+        transform.position = parentBone.position;
+        PlayerMovement.playerInstance.playerHasBall = true;
+
     }
 
 

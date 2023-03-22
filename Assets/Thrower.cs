@@ -10,6 +10,7 @@ public class Thrower : MonoBehaviour
     
     public void Throw()
     {
+        AIFollow.AInstance.ballScript.GetComponent<SphereCollider>().isTrigger = false;
         ballParent.GetComponentInChildren<BallScript>().ReleaseBall();
         
     }

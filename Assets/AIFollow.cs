@@ -21,7 +21,9 @@ public class AIFollow : MonoBehaviour
     public bool hasBall;
     
     public static AIFollow AInstance;
-    private GameObject collidedBall;
+    public GameObject collidedBall;
+
+    public BallScript ballScript;
 
     public void Awake()
     {
@@ -52,7 +54,7 @@ public class AIFollow : MonoBehaviour
                 RandomMovement();
                 if (hasBall)
                 {
-                    BallScript.ballInstance.BallToPlayer();
+                    ballScript.BallToPlayer();
                     hasBall = false;
                 }
             }
@@ -78,18 +80,14 @@ public class AIFollow : MonoBehaviour
         
         foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
 
-        if (BallScript.ballInstance.ballisGrounded && !BallScript.ballInstance.outofBounds &&  PlayerMovement.playerInstance.throwBall)
+        if (ballScript.ballisGrounded && !ballScript.outofBounds &&  PlayerMovement.playerInstance.throwBall)
         {
             foxAnimator.SetBool("Sit", false);
             foxAnimator.SetBool("Jump", false);
             foxAnimator.SetBool("Roll", false);
-            agent.destination = BallScript.ballInstance.transform.position;
+            agent.destination = ballScript.transform.position;
             foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
-            if (collided)
-            {
-                Debug.Log("b");
-                foxAnimator.SetFloat("AISpeed", 0f);
-            }
+            
         }
     }
 
@@ -113,7 +111,7 @@ public class AIFollow : MonoBehaviour
             collidedBall.GetComponent<SphereCollider>().isTrigger = true;
             collided = true;
             hasBall = true;
-            BallScript.ballInstance.ballisGrounded = false;
+            ballScript.ballisGrounded = false;
 
         }
     }

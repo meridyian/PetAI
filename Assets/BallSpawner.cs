@@ -10,7 +10,10 @@ public class BallSpawner : MonoBehaviour
     public void SpawnBall()
     {
         GameObject ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
+        AIFollow.AInstance.collidedBall = ball;
+        AIFollow.AInstance.ballScript = ball.GetComponent<BallScript>();
         ball.transform.parent = transform;
+        PlayerMovement.playerInstance.playerHasBall = true;
     }
     
 
