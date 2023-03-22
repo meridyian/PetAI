@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenCover.Framework.Model;
+using TreeEditor;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -18,7 +19,11 @@ public class AIFollow : MonoBehaviour
     private float timer = 0.0f;
     public Transform foxMouth;
     public Vector3 ballPosition;
-    
+    public bool collided;
+    public bool canPetAnimal;
+    public bool hasBall;
+
+
     public static AIFollow AInstance;
 
 
@@ -44,51 +49,63 @@ public class AIFollow : MonoBehaviour
             if (agent.velocity.magnitude / agent.speed < 0.1f)
             {
                 RandomMovement();
+                if (hasBall)
+                {
+                    BallScript.ballInstance.transform.parent = null;
+                    BallScript.ballInstance.rigid.isKinematic = true;
+                    BallScript.ballInstance.transform.parent = BallScript.ballInstance.parentBone;
+                    
+                }
             }
             
         }
-        
         // follow player
         
         if (sqDistance > minDistance * minDistance)
         {
             agent.destination = playerTransform.position;
+            
         }
         
         foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
         
-        if (BallScript.ballInstance.ballisGrounded)
+        //BallScript.ballInstance.ballisGrounded
+        if (BallScript.ballInstance.ballisGrounded && !BallScript.ballInstance.outofBounds &&  PlayerMovement.playerInstance.throwBall)
         {
-            ballPosition = BallScript.ballInstance.gameObject.transform.position;
             agent.destination = BallScript.ballInstance.transform.position;
-            StartCoroutine(RunToBall());
-
+            if (collided)
+            {
+                foxAnimator.SetFloat("AISpeed", 0f);
+                //BallScript.ballInstance.ballisGrounded = false;
+                hasBall = true;
+            }
         }
     }
-
-    public IEnumerator RunToBall()
-    {
-        float ballDistance = (BallScript.ballInstance.transform.position - transform.position).sqrMagnitude;
-        Debug.Log(ballDistance);
-        if (ballDistance < 0.3f)
-        {
-            foxAnimator.SetBool("TurnAround", true);
-            //foxAnimator.SetFloat("AISpeed", 0.2f);
-            yield return new WaitForSeconds(1f);
-            ballPosition = Vector3.MoveTowards(ballPosition, foxMouth.position, Time.deltaTime);
-            BallScript.ballInstance.ballisGrounded = false;
-            foxAnimator.SetBool("TurnAround", false);
-            agent.destination = playerTransform.position;
-            foxAnimator.SetFloat("AISpeed", 1f);
-        }
-    }
+   
 
     public void RandomMovement()
     {
-        //yield return new WaitForSeconds(1f);
         foxAnimator.SetTrigger("Jump");
-    
         foxAnimator.SetBool("Sit", true);
         
+
+    }
+
+    public void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Ball"))
+        {
+            collided = true;
+            BallScript.ballInstance.ballisGrounded = false;
+            /*
+            bunu çalıştırınca top havada geliyor 
+            Rigidbody ballRigid = other.gameObject.GetComponent<BallScript>().rigid;
+            ballRigid.isKinematic = true;
+            //ballRigid.MovePosition(foxMouth.position);
+            */
+            //other.transform.parent = transform;
+            //BallScript.ballInstance.rigid.isKinematic = true;
+
+        }
     }
 }

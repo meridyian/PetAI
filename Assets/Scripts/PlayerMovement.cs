@@ -5,6 +5,7 @@ using Newtonsoft.Json.Serialization;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions.Must;
 using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
@@ -14,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpHeight = 1.5f;
     public float currentSpeed = 0f;
+    public bool throwBall;
+    public bool keyPressed;
 
     // rotation control
     [SerializeField] private float speedSmoothVelocity = 0f;
@@ -37,6 +40,11 @@ public class PlayerMovement : MonoBehaviour
     public Transform targetTransform;
 
     public static PlayerMovement playerInstance;
+
+    public void Awake()
+    {
+        playerInstance = this;
+    }
 
     private void Start()
     {
@@ -106,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T) && movementDirection == Vector3.zero)
         {
+            keyPressed = true;
             StartCoroutine(ThrowBall());
         }
         
@@ -113,13 +122,12 @@ public class PlayerMovement : MonoBehaviour
         // to adjust speed changes
 
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
-
         charController.Move(movementDirection * currentSpeed * Time.deltaTime);
         gravityVector.y += gravity * Time.deltaTime * 1.2f;
         charController.Move(gravityVector * Time.deltaTime);
 
     }
-
+    
 
 
     public IEnumerator ThrowBall()
@@ -127,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isBallThrown", true);
         yield return new WaitForSeconds(0.1f);
         anim.SetBool("isBallThrown", false);
+        throwBall = true;
     }
 
 
