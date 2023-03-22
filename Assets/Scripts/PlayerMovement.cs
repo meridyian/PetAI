@@ -16,7 +16,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpHeight = 1.5f;
     public float currentSpeed = 0f;
     public bool throwBall;
-    public bool keyPressed;
+    
+    //parentBone u burda alman gerekebilir
+    public Transform parentBone;
 
     // rotation control
     [SerializeField] private float speedSmoothVelocity = 0f;
@@ -37,12 +39,11 @@ public class PlayerMovement : MonoBehaviour
     public Transform mainCameraTransform = null;
     private CharacterController charController = null;
     private Animator anim = null;
-    public Transform targetTransform;
-
     public static PlayerMovement playerInstance;
 
     public void Awake()
     {
+        if(playerInstance != null) return;
         playerInstance = this;
     }
 
@@ -64,10 +65,11 @@ public class PlayerMovement : MonoBehaviour
         float verticalInput = Input.GetAxis("Vertical");
         
         isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
+        
+        // inputMagnitude is in range [0,1]
         Vector3 movementDirection = new Vector3(horizontalInput,0, verticalInput);
         float inputMagnitude = Mathf.Clamp01(movementDirection.magnitude);
         
-
         movementDirection = Quaternion.AngleAxis(mainCameraTransform.rotation.eulerAngles.y, Vector3.up) *
                             movementDirection;
         movementDirection.Normalize();
@@ -78,35 +80,38 @@ public class PlayerMovement : MonoBehaviour
         {
             gravityVector.y -= 2.5f;
         }
-
-
+        
+        //if character is moving, face towards movement direction
         if (movementDirection != Vector3.zero)
         {
-            //spherically interpolates between a and b
+            
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementDirection),
                 rotationSpeed);
         }
 
-        // the speed that you wat to reach gradually
+        // the speed that you want to reach gradually
         targetSpeed = walkSpeed * inputMagnitude;
 
-        // Run movement
+        // RUN
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            // targetSpeed should be updated if you want to run
             targetSpeed = runSpeed * inputMagnitude;
             anim.SetFloat("Speed", 1f * inputMagnitude, speedSmoothTime, Time.deltaTime);
         }
 
-        // walk animation
+        // Walking should be the root target motion
         anim.SetFloat("Speed", 0.5f * inputMagnitude, speedSmoothTime, Time.deltaTime);
 
         // Pet the animal
+        /*
         if (Input.GetKey(KeyCode.E) && movementDirection == Vector3.zero)
         {
             StartCoroutine(PetAnimal());
         }
+        */
 
-        // add throw and jump animations
+        // Jump animation
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             gravityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -114,11 +119,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T) && movementDirection == Vector3.zero)
         {
-            keyPressed = true;
             StartCoroutine(ThrowBall());
         }
         
-
         // to adjust speed changes
 
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedSmoothVelocity, speedSmoothTime);
@@ -138,26 +141,21 @@ public class PlayerMovement : MonoBehaviour
         throwBall = true;
     }
 
-
+    /*
     public IEnumerator PetAnimal()
     {
-        // put the animal as target
-        // after adding ball throw animation, player can pet the animal
-        // after animal turns around the player pet the animal
         yield return new WaitForSeconds(1f);
         anim.SetBool("isPetting", true);
         yield return new WaitForSeconds(5f);
         anim.SetBool("isPetting", false);
     }
-
-    
+    */
 
     private void OnApplicationFocus(bool focus)
     {
         if (focus)
         {
             Cursor.lockState = CursorLockMode.Locked;
-            
         }
         else
         {

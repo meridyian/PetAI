@@ -9,9 +9,10 @@ public class BallSpawner : MonoBehaviour
  
     public void SpawnBall()
     {
-        GameObject  ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
+        GameObject ball = Instantiate(ballPrefab, transform.position, Quaternion.identity);
         ball.transform.parent = transform;
     }
+    
 
     
 }

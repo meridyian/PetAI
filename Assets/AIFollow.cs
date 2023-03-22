@@ -16,22 +16,22 @@ public class AIFollow : MonoBehaviour
     
     public float maxTime = .05f;
     public float minDistance = 1.0f;
-    private float timer = 0.0f;
     public Transform foxMouth;
-    public Vector3 ballPosition;
     public bool collided;
-    public bool canPetAnimal;
     public bool hasBall;
-
-
+    
     public static AIFollow AInstance;
+    private GameObject collidedBall;
 
-
-    // Start is called before the first frame update
+    public void Awake()
+    {
+        if (AInstance != null) return;
+        AInstance = this;
+    }
+    
+    
     void Start()
     {
-        
-        AInstance = this;
         agent = GetComponent<NavMeshAgent>();
         foxAnimator = GetComponent<Animator>();
     }
@@ -46,17 +46,17 @@ public class AIFollow : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.LookRotation(playerTransform.forward),
                 Time.deltaTime * 5);
-            if (agent.velocity.magnitude / agent.speed < 0.1f)
+
+            if (agent.velocity.magnitude == 0)
             {
                 RandomMovement();
                 if (hasBall)
                 {
-                    BallScript.ballInstance.transform.parent = null;
-                    BallScript.ballInstance.rigid.isKinematic = true;
-                    BallScript.ballInstance.transform.parent = BallScript.ballInstance.parentBone;
-                    
+                    BallScript.ballInstance.BallToPlayer();
+                    hasBall = false;
                 }
             }
+            
             
         }
         // follow player
@@ -64,48 +64,59 @@ public class AIFollow : MonoBehaviour
         if (sqDistance > minDistance * minDistance)
         {
             agent.destination = playerTransform.position;
+            foxAnimator.SetBool("Sit", false);
+            foxAnimator.SetBool("Jump", false);
+            foxAnimator.SetBool("Roll", false);
+            if (collided && foxMouth != collidedBall.transform.parent)
+            {
+                collidedBall.GetComponent<SphereCollider>().isTrigger = false;
+                collidedBall.GetComponent<Rigidbody>().isKinematic = false;
+                collided = false;
+            }
             
         }
         
         foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
-        
-        //BallScript.ballInstance.ballisGrounded
+
         if (BallScript.ballInstance.ballisGrounded && !BallScript.ballInstance.outofBounds &&  PlayerMovement.playerInstance.throwBall)
         {
+            foxAnimator.SetBool("Sit", false);
+            foxAnimator.SetBool("Jump", false);
+            foxAnimator.SetBool("Roll", false);
             agent.destination = BallScript.ballInstance.transform.position;
+            foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
             if (collided)
             {
+                Debug.Log("b");
                 foxAnimator.SetFloat("AISpeed", 0f);
-                //BallScript.ballInstance.ballisGrounded = false;
-                hasBall = true;
             }
         }
     }
-   
 
+    
+    
     public void RandomMovement()
     {
-        foxAnimator.SetTrigger("Jump");
+        foxAnimator.SetBool("Jump", true);
+        foxAnimator.SetBool("Roll", true);
         foxAnimator.SetBool("Sit", true);
         
-
     }
 
     public void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Ball"))
         {
+
+            collidedBall = other.gameObject;
+            collidedBall.GetComponent<Rigidbody>().isKinematic = true;
+            collidedBall.GetComponent<SphereCollider>().isTrigger = true;
             collided = true;
+            hasBall = true;
             BallScript.ballInstance.ballisGrounded = false;
-            /*
-            bunu çalıştırınca top havada geliyor 
-            Rigidbody ballRigid = other.gameObject.GetComponent<BallScript>().rigid;
-            ballRigid.isKinematic = true;
-            //ballRigid.MovePosition(foxMouth.position);
-            */
-            //other.transform.parent = transform;
-            //BallScript.ballInstance.rigid.isKinematic = true;
 
         }
     }
+    
+    
 }

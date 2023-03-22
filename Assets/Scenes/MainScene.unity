@@ -667,6 +667,10 @@ PrefabInstance:
       propertyPath: parentBone
       value: 
       objectReference: {fileID: 1213244365829089040}
+    - target: {fileID: 1571730986097866655, guid: 569bc2feb86ec49d69d7c533fa4b7891, type: 3}
+      propertyPath: ballSpawner
+      value: 
+      objectReference: {fileID: 7896716172096547823}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 569bc2feb86ec49d69d7c533fa4b7891, type: 3}
 --- !u!4 &455515066 stripped
@@ -1225,7 +1229,7 @@ MonoBehaviour:
   jumpHeight: 1.5
   currentSpeed: 0
   throwBall: 0
-  keyPressed: 0
+  parentBone: {fileID: 1213244365829089040}
   speedSmoothVelocity: 0
   speedSmoothTime: 0.1
   rotationSpeed: 0.01
@@ -1238,7 +1242,6 @@ MonoBehaviour:
   gravity: -9.81
   gravityVector: {x: 0, y: 0, z: 0}
   mainCameraTransform: {fileID: 963194228}
-  targetTransform: {fileID: 0}
 --- !u!1001 &938172182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2325,11 +2328,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1476552611 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1571730986097866645, guid: 569bc2feb86ec49d69d7c533fa4b7891, type: 3}
-  m_PrefabInstance: {fileID: 455515065}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1487775463
 GameObject:
   m_ObjectHideFlags: 0
@@ -4380,7 +4378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f357358506b7c4f21a1cf57e11eed4fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballpref: {fileID: 1476552611}
+  ballParent: {fileID: 1213244365829089040}
 --- !u!1 &5881436200416258431
 GameObject:
   m_ObjectHideFlags: 0

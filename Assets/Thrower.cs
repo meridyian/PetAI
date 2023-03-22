@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Thrower : MonoBehaviour
 {
-    public GameObject ballpref;
+    //public GameObject ballpref;
+    public Transform ballParent;
+
     
     public void Throw()
     {
-        BallScript ballScript = ballpref.GetComponent<BallScript>();
-        ballScript.ReleaseBall();
+        ballParent.GetComponentInChildren<BallScript>().ReleaseBall();
+        
     }
 }

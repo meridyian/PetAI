@@ -8,29 +8,55 @@ public class BallScript : MonoBehaviour
 {
     public Transform parentBone;
     public Rigidbody rigid;
+    public GameObject player;
+    
     [SerializeField] private Vector3 lastPos;
     [SerializeField] private Vector3 curVel;
     public float throwSpeed;
-    public GameObject player;
+    
+    // check if the ball is grounded
+    // distance between ball and player
+    //check the boundaries of the ground 
     public bool ballisGrounded;
-    public static BallScript ballInstance;
     public float ballDistance;
     public bool outofBounds;
+    public BallSpawner ballSpawner;
     
+    public static BallScript ballInstance;
 
     public void Awake()
     {
+        if (ballInstance != null) return;
         ballInstance = this;
+    }
+
+    public void Start()
+    {
+        rigid = GetComponent<Rigidbody>();
+        player = PlayerMovement.playerInstance.gameObject;
+        parentBone = PlayerMovement.playerInstance.parentBone;
+        ballSpawner = GetComponentInParent<BallSpawner>();
     }
 
     
     public void Update()
     {
         ballDistance = (transform.position - player.transform.position).magnitude;
-        if (ballDistance < 1f && transform.parent == null && AIFollow.AInstance.hasBall)
+        
+        // AIFollow.AInstance.hasBall should be there so that it wont stick to parentbone
+        if (ballDistance < 2f && transform.parent == null && AIFollow.AInstance.hasBall)
         {
             transform.position = parentBone.transform.position;
             transform.parent = parentBone.transform;
+            //AIFollow.AInstance.hasBall = false;
+        }
+
+        if (transform.position.x is > 45f or < -45f || transform.position.z is > 45f or < -45f)
+        {
+            outofBounds = true;
+            ballSpawner.SpawnBall();
+            Destroy(gameObject);
+            
         }
     }
     
@@ -41,8 +67,7 @@ public class BallScript : MonoBehaviour
         rigid.useGravity = true;
         rigid.isKinematic = false;
         transform.rotation = parentBone.transform.rotation;
-        
-        //
+
         if (rigid.transform.position.y > 0.3f)
         {
             rigid.AddForce((player.transform.forward + player.transform.up) * throwSpeed);
@@ -62,11 +87,22 @@ public class BallScript : MonoBehaviour
         }
         if(other.gameObject.CompareTag("PetAI"))
         {
-            transform.parent = other.transform;
+            transform.parent = other.transform.GetComponent<AIFollow>().foxMouth;
+            //transform.position = Vector3.zero;
+            //ballisGrounded = false;
         }
  
     }
 
-    
+    public void BallToPlayer()
+    {
+        //transform.parent = null;
+        rigid.isKinematic = true;
+        transform.parent = parentBone;
+        transform.position = parentBone.position;
+        GetComponent<SphereCollider>().isTrigger = false;
+        
+    }
+
 
 }
