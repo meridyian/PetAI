@@ -71,7 +71,7 @@ public class AIFollow : MonoBehaviour
             foxAnimator.SetBool("Roll", false);
             if (collided && foxMouth != collidedBall.transform.parent)
             {
-                collidedBall.GetComponent<SphereCollider>().isTrigger = false;
+                //collidedBall.GetComponent<SphereCollider>().isTrigger = false;
                 collidedBall.GetComponent<Rigidbody>().isKinematic = false;
                 collided = false;
             }

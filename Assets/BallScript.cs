@@ -49,8 +49,6 @@ public class BallScript : MonoBehaviour
         {
             transform.position = parentBone.transform.position;
             transform.parent = parentBone.transform;
-            //PlayerMovement.playerInstance.playerHasBall = true;
-            //AIFollow.AInstance.hasBall = false;
         }
 
         if (transform.position.x is > 45f or < -45f || transform.position.z is > 45f or < -45f)
@@ -89,18 +87,16 @@ public class BallScript : MonoBehaviour
         if(other.gameObject.CompareTag("PetAI"))
         {
             transform.parent = other.transform.GetComponent<AIFollow>().foxMouth;
-            //transform.position = Vector3.zero;
-            //ballisGrounded = false;
+
         }
  
     }
 
     public void BallToPlayer()
     {
-        //transform.parent = null;
+
         rigid.isKinematic = true;
         transform.parent = parentBone;
-        GetComponent<SphereCollider>().isTrigger = false;
         transform.position = parentBone.position;
         PlayerMovement.playerInstance.playerHasBall = true;
 
