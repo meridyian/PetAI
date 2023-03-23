@@ -99,6 +99,7 @@ public class BallScript : MonoBehaviour
         transform.parent = parentBone;
         transform.position = parentBone.position;
         PlayerMovement.playerInstance.playerHasBall = true;
+        AIFollow.AInstance.petDestination = false;
 
     }
 

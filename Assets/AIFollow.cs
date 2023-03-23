@@ -19,6 +19,7 @@ public class AIFollow : MonoBehaviour
     public Transform foxMouth;
     public bool collided;
     public bool hasBall;
+    public bool petDestination;
     
     public static AIFollow AInstance;
     public GameObject collidedBall;
@@ -80,17 +81,28 @@ public class AIFollow : MonoBehaviour
         
         foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
 
-        if (ballScript.ballisGrounded && !ballScript.outofBounds &&  PlayerMovement.playerInstance.throwBall)
+        if (ballScript.ballisGrounded && !ballScript.outofBounds && PlayerMovement.playerInstance.throwBall) 
         {
             foxAnimator.SetBool("Sit", false);
             foxAnimator.SetBool("Jump", false);
             foxAnimator.SetBool("Roll", false);
-            agent.destination = ballScript.transform.position;
-            foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
+            
+            if (petDestination)
+            {
+                agent.destination = ballScript.transform.position;
+                foxAnimator.SetFloat("AISpeed", agent.velocity.magnitude);
+                
+            }
+                
             
         }
-    }
 
+        if (Input.GetKeyDown(KeyCode.F) && !PlayerMovement.playerInstance.playerHasBall)
+        {
+            petDestination = true;
+        }
+            
+    }
     
     
     public void RandomMovement()
