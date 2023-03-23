@@ -118,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
             gravityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        if (Input.GetKeyDown(KeyCode.T) && movementDirection == Vector3.zero && playerHasBall)
+        if (Input.GetMouseButtonDown(0) && movementDirection == Vector3.zero && playerHasBall)
         {
             StartCoroutine(ThrowBall());
             playerHasBall = false;
