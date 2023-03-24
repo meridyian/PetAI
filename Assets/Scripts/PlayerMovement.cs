@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Serialization;
 using Unity.VisualScripting;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions.Must;
@@ -43,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController charController = null;
     private Animator anim = null;
     public static PlayerMovement playerInstance;
-
+    
     public void Awake()
     {
         if(playerInstance != null) return;
@@ -55,6 +56,7 @@ public class PlayerMovement : MonoBehaviour
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         startTime = 0f;
+        
     }
 
     private void Update()
@@ -121,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && movementDirection == Vector3.zero && playerHasBall)
         {
             durationTime = (Time.time - startTime) * 6f;
-            Debug.Log(durationTime);
+            
             StartCoroutine(ThrowBall());
             playerHasBall = false;
         }

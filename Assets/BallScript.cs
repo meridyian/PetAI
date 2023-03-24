@@ -69,7 +69,7 @@ public class BallScript : MonoBehaviour
         if (rigid.transform.position.y > 0.3f)
         {
             //rigid.AddForce((player.transform.forward + player.transform.up) * throwSpeed);
-            rigid.AddForce( (player.transform.forward  + player.transform.up) * throwSpeed);
+            rigid.AddForce( (player.transform.forward  + player.transform.up ) * throwSpeed + Vector3.right * PlayerMovement.playerInstance.durationTime);
         }
         else
         {
