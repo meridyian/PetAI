@@ -120,10 +120,12 @@ public class AIFollow : MonoBehaviour
 
             collidedBall = other.gameObject;
             collidedBall.GetComponent<Rigidbody>().isKinematic = true;
-            collidedBall.GetComponent<SphereCollider>().isTrigger = true;
             collided = true;
             hasBall = true;
             ballScript.ballisGrounded = false;
+            collidedBall.GetComponent<SphereCollider>().isTrigger = true;
+            
+            
 
         }
     }

@@ -9,8 +9,7 @@ public class BallScript : MonoBehaviour
     public Transform parentBone;
     public Rigidbody rigid;
     public GameObject player;
-    public Transform groundedTransform;
-    
+
     [SerializeField] private Vector3 lastPos;
     [SerializeField] private Vector3 curVel;
     public float throwSpeed;
@@ -69,7 +68,8 @@ public class BallScript : MonoBehaviour
 
         if (rigid.transform.position.y > 0.3f)
         {
-            rigid.AddForce((player.transform.forward + player.transform.up) * throwSpeed);
+            //rigid.AddForce((player.transform.forward + player.transform.up) * throwSpeed);
+            rigid.AddForce( (player.transform.forward  + player.transform.up) * throwSpeed);
         }
         else
         {

@@ -16,7 +16,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpHeight = 1.5f;
     public float currentSpeed = 0f;
     public bool throwBall;
-    public bool playerHasBall  =true;
+    public bool playerHasBall =true;
+    public float startTime;
+    public float durationTime;
     
     //parentBone u burda alman gerekebilir
     public Transform parentBone;
@@ -52,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
     {
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
-        
+        startTime = 0f;
     }
 
     private void Update()
@@ -103,14 +105,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Walking should be the root target motion
         anim.SetFloat("Speed", 0.5f * inputMagnitude, speedSmoothTime, Time.deltaTime);
-
-        // Pet the animal
-        /*
-        if (Input.GetKey(KeyCode.E) && movementDirection == Vector3.zero)
-        {
-            StartCoroutine(PetAnimal());
-        }
-        */
+        
 
         // Jump animation
         if (Input.GetButtonDown("Jump") && isGrounded)
@@ -118,8 +113,15 @@ public class PlayerMovement : MonoBehaviour
             gravityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        if (Input.GetMouseButtonDown(0) && movementDirection == Vector3.zero && playerHasBall)
+        if (Input.GetMouseButtonDown(0))
         {
+            startTime = Time.time;
+        }
+
+        if (Input.GetMouseButtonUp(0) && movementDirection == Vector3.zero && playerHasBall)
+        {
+            durationTime = (Time.time - startTime) * 6f;
+            Debug.Log(durationTime);
             StartCoroutine(ThrowBall());
             playerHasBall = false;
         }
@@ -142,17 +144,8 @@ public class PlayerMovement : MonoBehaviour
         anim.SetBool("isBallThrown", false);
         throwBall = true;
     }
-
-    /*
-    public IEnumerator PetAnimal()
-    {
-        yield return new WaitForSeconds(1f);
-        anim.SetBool("isPetting", true);
-        yield return new WaitForSeconds(5f);
-        anim.SetBool("isPetting", false);
-    }
-    */
-
+    
+    
     private void OnApplicationFocus(bool focus)
     {
         if (focus)
