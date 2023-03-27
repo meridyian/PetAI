@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && movementDirection == Vector3.zero && playerHasBall)
         {
             durationTime = (Time.time - startTime) * 6f;
-            
+            Debug.Log(durationTime);
             StartCoroutine(ThrowBall());
             playerHasBall = false;
         }
@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
         throwBall = true;
     }
     
-    
+    /*
     private void OnApplicationFocus(bool focus)
     {
         if (focus)
@@ -159,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
+    */
 
 }
        
