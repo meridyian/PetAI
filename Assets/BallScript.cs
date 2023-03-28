@@ -100,6 +100,7 @@ public class BallScript : MonoBehaviour
         transform.position = parentBone.position;
         PlayerMovement.playerInstance.playerHasBall = true;
         AIFollow.AInstance.petDestination = false;
+        PlayerMovement.playerInstance.startTime = 0F;
 
     }
 

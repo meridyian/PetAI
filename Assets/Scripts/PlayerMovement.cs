@@ -20,9 +20,11 @@ public class PlayerMovement : MonoBehaviour
     public bool playerHasBall =true;
     public float startTime;
     public float durationTime;
+
     
     //parentBone u burda alman gerekebilir
     public Transform parentBone;
+
 
     // rotation control
     [SerializeField] private float speedSmoothVelocity = 0f;
@@ -118,14 +120,15 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             startTime = Time.time;
+
         }
 
         if (Input.GetMouseButtonUp(0) && movementDirection == Vector3.zero && playerHasBall)
         {
             durationTime = (Time.time - startTime) * 6f;
-            Debug.Log(durationTime);
             StartCoroutine(ThrowBall());
             playerHasBall = false;
+
         }
         
         // to adjust speed changes
