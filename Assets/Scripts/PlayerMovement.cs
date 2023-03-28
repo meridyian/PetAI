@@ -18,9 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public float currentSpeed = 0f;
     public bool throwBall;
     public bool playerHasBall =true;
-    public float startTime;
-    public float durationTime;
-
+    
     
     //parentBone u burda alman gerekebilir
     public Transform parentBone;
@@ -57,8 +55,7 @@ public class PlayerMovement : MonoBehaviour
     {
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
-        startTime = 0f;
-        
+
     }
 
     private void Update()
@@ -116,16 +113,11 @@ public class PlayerMovement : MonoBehaviour
         {
             gravityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            startTime = Time.time;
-
-        }
+        
 
         if (Input.GetMouseButtonUp(0) && movementDirection == Vector3.zero && playerHasBall)
         {
-            durationTime = (Time.time - startTime) * 6f;
+
             StartCoroutine(ThrowBall());
             playerHasBall = false;
 
@@ -140,7 +132,6 @@ public class PlayerMovement : MonoBehaviour
 
     }
     
-
 
     public IEnumerator ThrowBall()
     {

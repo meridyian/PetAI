@@ -66,10 +66,12 @@ public class BallScript : MonoBehaviour
         rigid.isKinematic = false;
         transform.rotation = parentBone.transform.rotation;
 
-        if (rigid.transform.position.y > 0.3f)
+        //rigid.transform.position.y > 0.3f
+        if (PlayerMovement.playerInstance.throwBall)
         {
             //rigid.AddForce((player.transform.forward + player.transform.up) * throwSpeed);
-            rigid.AddForce( (player.transform.forward  + player.transform.up ) * throwSpeed + Vector3.right * PlayerMovement.playerInstance.durationTime);
+            rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed );
+
         }
         else
         {
@@ -100,7 +102,7 @@ public class BallScript : MonoBehaviour
         transform.position = parentBone.position;
         PlayerMovement.playerInstance.playerHasBall = true;
         AIFollow.AInstance.petDestination = false;
-        PlayerMovement.playerInstance.startTime = 0F;
+        // slider bar ı sıfırla 
 
     }
 
