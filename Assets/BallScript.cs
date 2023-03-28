@@ -23,6 +23,7 @@ public class BallScript : MonoBehaviour
     public float ballDistance;
     public bool outofBounds;
     public BallSpawner ballSpawner;
+    public bool onWall;
     
     public static BallScript ballInstance;
 
@@ -52,7 +53,7 @@ public class BallScript : MonoBehaviour
             transform.parent = parentBone.transform;
         }
 
-        if (transform.position.x is > 45f or < -45f || transform.position.z is > 45f or < -45f)
+        if (transform.position.x is > 45f or < -45f || transform.position.z is > 45f or < -45f || onWall)
         {
             outofBounds = true;
             ballSpawner.SpawnBall();
@@ -90,7 +91,11 @@ public class BallScript : MonoBehaviour
         if(other.gameObject.CompareTag("PetAI"))
         {
             transform.parent = other.transform.GetComponent<AIFollow>().foxMouth;
+        }
 
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            onWall = true;
         }
  
     }
