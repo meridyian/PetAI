@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using TreeEditor;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class BallScript : MonoBehaviour
 {
@@ -66,13 +68,12 @@ public class BallScript : MonoBehaviour
         rigid.isKinematic = false;
         transform.rotation = parentBone.transform.rotation;
 
-        //rigid.transform.position.y > 0.3f
+
         if (PlayerMovement.playerInstance.throwBall)
         {
-            //rigid.AddForce((player.transform.forward + player.transform.up) * throwSpeed);
-            rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed );
-
-        }
+            rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed + player.transform.right * PlayerStats.playerStatsInstance.forceToAdd * 3f);
+        }        
+        
         else
         {
             rigid.isKinematic = false;
@@ -102,7 +103,7 @@ public class BallScript : MonoBehaviour
         transform.position = parentBone.position;
         PlayerMovement.playerInstance.playerHasBall = true;
         AIFollow.AInstance.petDestination = false;
-        // slider bar ı sıfırla 
+        PlayerStats.playerStatsInstance.ForceSlider.value = Random.Range(-100f, 100f);
 
     }
 

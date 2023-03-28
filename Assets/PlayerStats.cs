@@ -11,9 +11,18 @@ public class PlayerStats : MonoBehaviour
     private static float minForce = -100f;
     private bool isIncreasing;
     private float direction = 1f;
+    public float forceToAdd;
+    
+
+    public static PlayerStats playerStatsInstance;
 
     public Slider ForceSlider;
-    
+
+    public void Awake()
+    {
+        if (playerStatsInstance != null) return;
+        playerStatsInstance = this;
+    }
     void Start()
     {
         ForceSlider.minValue = -100;
@@ -36,7 +45,7 @@ public class PlayerStats : MonoBehaviour
 
         if (isIncreasing)
         {
-            ForceSlider.value += Time.deltaTime * 100f * direction;
+            ForceSlider.value += Time.deltaTime * 200f * direction;
             if (ForceSlider.value >= maxForce)
             {
                 ForceSlider.value = maxForce;
@@ -47,32 +56,11 @@ public class PlayerStats : MonoBehaviour
                 ForceSlider.value = minForce;
                 direction *= -1f;
             }
-        }
-    }
 
-    
-    /*
-    void IncreaseForce()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            Force += 3f; 
-            ForceSlider.value = Force;
-            
-            if (ForceSlider.value == maxForce)
-            {
-                Force -= 3f;
-                
-            }
-            
-            else if (ForceSlider.value == minForce)
-            {
-                Force += 3f;
-            }
+            forceToAdd =  ForceSlider.value;
+            Debug.Log(forceToAdd);
         }
-        
     }
-    */
     
 }
 

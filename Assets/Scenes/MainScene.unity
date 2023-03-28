@@ -1391,8 +1391,6 @@ MonoBehaviour:
   currentSpeed: 0
   throwBall: 0
   playerHasBall: 1
-  startTime: 0
-  durationTime: 0
   parentBone: {fileID: 1213244365829089040}
   speedSmoothVelocity: 0
   speedSmoothTime: 0.1
@@ -1418,6 +1416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436a594296d264a8d8a0c050cd2091c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  forceToAdd: 0
   ForceSlider: {fileID: 1491549634}
 --- !u!1001 &938172182
 PrefabInstance:
@@ -2939,7 +2938,7 @@ MonoBehaviour:
   m_MinValue: -100
   m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: -100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
