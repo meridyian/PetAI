@@ -1646,6 +1646,11 @@ MonoBehaviour:
   isIncreasing: 0
   forceToAdd: 0
   ForceBar: {fileID: 1739277484}
+  durationTime: 0
+  trackedPosition: {fileID: 70271319}
+  forwardForce: 0
+  forceY: 0
+  forceZ: 0
   ForceSlider: {fileID: 1491549634}
 --- !u!1001 &938172182
 PrefabInstance:

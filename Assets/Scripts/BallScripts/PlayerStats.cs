@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine.Editor;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +15,12 @@ public class PlayerStats : MonoBehaviour
     private float direction = 1f;
     public float forceToAdd;
     public GameObject ForceBar;
+    public float durationTime;
+    public Transform trackedPosition;
+    public Vector3 forwardForce;
+    public float forceY;
+    public float forceZ;
 
-    
-    
 
     public static PlayerStats playerStatsInstance;
 
@@ -44,17 +48,20 @@ public class PlayerStats : MonoBehaviour
                 isIncreasing = true;
                 PlayerMovement.playerInstance.startDirect = true;
                 ForceBar.SetActive(true);
+                
             }
             
             
             if (Input.GetMouseButtonUp(0))
             {
+                forwardForce = trackedPosition.forward;
                 isIncreasing = false;
                 ForceBar.SetActive(false);
             }
 
             if (isIncreasing)
             {
+                durationTime = Time.deltaTime * 10f;
                 ForceSlider.value += Time.deltaTime * 50f * direction;
                 if (ForceSlider.value >= maxForce)
                 {
@@ -69,14 +76,10 @@ public class PlayerStats : MonoBehaviour
                 } 
                 
 
-                forceToAdd =  ForceSlider.value;
-
+                forceToAdd = ForceSlider.value;
+                Debug.Log(forceToAdd);
             }
 
-        }
-        else
-        {
-            forceToAdd = 0f;
         }
 
     }

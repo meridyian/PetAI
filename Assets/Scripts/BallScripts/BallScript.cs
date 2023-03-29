@@ -24,7 +24,8 @@ public class BallScript : MonoBehaviour
     public bool outofBounds;
     public BallSpawner ballSpawner;
     public bool onWall;
-    
+
+
     
     public static BallScript ballInstance;
 
@@ -75,11 +76,13 @@ public class BallScript : MonoBehaviour
         if (PlayerMovement.playerInstance.throwBall)
         {
             
+            //forceZ = (parentBone.forward * PlayerStats.playerStatsInstance.forceToAdd * throwSpeed).magnitude;
             //rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed + player.transform.right * PlayerStats.playerStatsInstance.forceToAdd * 3f);
-            rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed  + player.transform.right * PlayerMovement.playerInstance.slideValue);
+            rigid.AddForce((player.transform.forward * throwSpeed/18f * PlayerStats.playerStatsInstance.forceToAdd + player.transform.up * throwSpeed + player.transform.right * PlayerMovement.playerInstance.slideValue ));
             PlayerStats.playerStatsInstance.ForceSlider.value = 0f;
             PlayerStats.playerStatsInstance.isIncreasing = false;
             PlayerMovement.playerInstance.startDirect = false;
+            PlayerStats.playerStatsInstance.forceToAdd = 0f;
             //rigid.AddForce(PlayerMovement.playerInstance.GetComponent<DragMouse>().directedVector);
         }        
         
