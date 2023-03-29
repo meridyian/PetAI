@@ -18,10 +18,14 @@ public class PlayerMovement : MonoBehaviour
     public float currentSpeed = 0f;
     public bool throwBall;
     public bool playerHasBall =true;
-    
+
+    public float slideValue;
     
     //parentBone u burda alman gerekebilir
     public Transform parentBone;
+
+    public bool startDirect;
+
 
 
     // rotation control
@@ -61,6 +65,22 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         Move();
+
+        
+
+        if (startDirect)
+        {
+            slideValue = Input.mousePosition.x - Screen.width/2f;
+            Debug.Log(slideValue);
+        }
+        
+
+        //directionVector = new Vector3(Input.mousePosition.x - gameObject.transform.localPosition.x, 0f, 0f);
+        /*
+        Debug.Log("mouse position" + mainCameraTransform.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition).x);
+        Debug.Log("transform"+ mainCameraTransform.GetComponent<Camera>().ScreenToWorldPoint(transform.localPosition).x);
+        */
+        
     }
 
     private void Move()
@@ -114,13 +134,13 @@ public class PlayerMovement : MonoBehaviour
             gravityVector.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         
-
+        
         if (Input.GetMouseButtonUp(0) && movementDirection == Vector3.zero && playerHasBall)
         {
 
             StartCoroutine(ThrowBall());
             playerHasBall = false;
-
+            
         }
         
         // to adjust speed changes

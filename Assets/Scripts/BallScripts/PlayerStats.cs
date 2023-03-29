@@ -7,11 +7,15 @@ using UnityEngine.UI;
 public class PlayerStats : MonoBehaviour
 {
     private static float Force;
+    private static float minForce = 0;
     private static float maxForce = 100;
-    private static float minForce = -100f;
-    private bool isIncreasing;
+    //private static float minForce = -100f;
+    public bool isIncreasing;
     private float direction = 1f;
     public float forceToAdd;
+    public GameObject ForceBar;
+
+    
     
 
     public static PlayerStats playerStatsInstance;
@@ -25,48 +29,56 @@ public class PlayerStats : MonoBehaviour
     }
     void Start()
     {
-        ForceSlider.minValue = -100;
+        ForceSlider.minValue = 0;
         ForceSlider.maxValue = 100f;
-        
+
     }
 
     void Update()
     {
-        
-        // random bir şekilde başlıyor bunun böyle olmasını istemiyorsa ikiye böl iflerle yine
         
         if (PlayerMovement.playerInstance.playerHasBall)
         {
             if (Input.GetMouseButtonDown(0))
             {
                 isIncreasing = true;
+                PlayerMovement.playerInstance.startDirect = true;
+                ForceBar.SetActive(true);
             }
-
+            
+            
             if (Input.GetMouseButtonUp(0))
             {
                 isIncreasing = false;
-            
+                ForceBar.SetActive(false);
             }
 
             if (isIncreasing)
             {
-                ForceSlider.value += Time.deltaTime * 200f * direction;
+                ForceSlider.value += Time.deltaTime * 50f * direction;
                 if (ForceSlider.value >= maxForce)
                 {
                     ForceSlider.value = maxForce;
                     direction *= -1f;
                 }
+                
                 else if (ForceSlider.value <= minForce)
                 {
                     ForceSlider.value = minForce;
                     direction *= -1f;
-                }
+                } 
+                
 
                 forceToAdd =  ForceSlider.value;
-                Debug.Log(forceToAdd);
+
             }
+
         }
-        
+        else
+        {
+            forceToAdd = 0f;
+        }
+
     }
     
 }

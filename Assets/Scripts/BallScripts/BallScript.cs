@@ -25,6 +25,7 @@ public class BallScript : MonoBehaviour
     public BallSpawner ballSpawner;
     public bool onWall;
     
+    
     public static BallScript ballInstance;
 
     public void Awake()
@@ -39,6 +40,7 @@ public class BallScript : MonoBehaviour
         player = PlayerMovement.playerInstance.gameObject;
         parentBone = PlayerMovement.playerInstance.parentBone;
         ballSpawner = GetComponentInParent<BallSpawner>();
+        
     }
 
     
@@ -72,7 +74,13 @@ public class BallScript : MonoBehaviour
 
         if (PlayerMovement.playerInstance.throwBall)
         {
-            rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed + player.transform.right * PlayerStats.playerStatsInstance.forceToAdd * 3f);
+            
+            //rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed + player.transform.right * PlayerStats.playerStatsInstance.forceToAdd * 3f);
+            rigid.AddForce((player.transform.forward + player.transform.up ) * throwSpeed  + player.transform.right * PlayerMovement.playerInstance.slideValue);
+            PlayerStats.playerStatsInstance.ForceSlider.value = 0f;
+            PlayerStats.playerStatsInstance.isIncreasing = false;
+            PlayerMovement.playerInstance.startDirect = false;
+            //rigid.AddForce(PlayerMovement.playerInstance.GetComponent<DragMouse>().directedVector);
         }        
         
         else
@@ -108,7 +116,7 @@ public class BallScript : MonoBehaviour
         transform.position = parentBone.position;
         PlayerMovement.playerInstance.playerHasBall = true;
         AIFollow.AInstance.petDestination = false;
-        PlayerStats.playerStatsInstance.ForceSlider.value = Random.Range(-100f, 100f);
+        PlayerStats.playerStatsInstance.ForceSlider.value = 0f;
 
     }
 
